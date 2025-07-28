@@ -1,34 +1,25 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import './globals.css'
+import type { Metadata } from 'next'
+import { ReactNode } from 'react'
+import { getServerSession } from "next-auth"
+import SessionWrapper from './component/SessionWrapper'
+import { authOptions } from './api/auth/[...nextauth]/route'
 
 export const metadata: Metadata = {
-  title: "FriseurPLan",
-  description: "",
-};
+  title: 'Minha App',
+  description: 'Autenticação com Keycloak',
+}
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  const session = await getServerSession(authOptions)
+
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+    <html lang="pt-BR">
+      <body>
+        <SessionWrapper session={session}>
+          {children}
+        </SessionWrapper>
       </body>
     </html>
-  );
+  )
 }
