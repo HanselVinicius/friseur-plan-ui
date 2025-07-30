@@ -1,24 +1,26 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { ReactNode } from 'react'
-import { getServerSession } from "next-auth"
-import SessionWrapper from './component/SessionWrapper'
-import { authOptions } from './api/auth/[...nextauth]/route'
+import { Providers } from './Providers'
+import SessionGuard from './component/SessionGuard'
 
 export const metadata: Metadata = {
   title: 'Minha App',
   description: 'Autenticação com Keycloak',
 }
 
-export default async function RootLayout({ children }: { children: ReactNode }) {
-  const session = await getServerSession(authOptions)
-
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <html lang="pt-BR">
+    <html lang="en">
       <body>
-        <SessionWrapper session={session}>
-          {children}
-        </SessionWrapper>
+        <Providers>
+          <SessionGuard>
+            {children}
+          </SessionGuard>
+        </Providers>
       </body>
     </html>
   )
